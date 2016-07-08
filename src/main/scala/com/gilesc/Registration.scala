@@ -1,11 +1,9 @@
-package com.gilesc.registration
+package com.gilesc
 
 import java.time.ZonedDateTime
 
-import cats.{~>, Id}
 import cats.free.Free
 import cats.free.Free.liftF
-import com.gilesc.ApplicationScript
 
 case class User(id: Long, username: String, email: String, password: String, createdAt: ZonedDateTime)
 
@@ -22,5 +20,3 @@ trait Registration extends ApplicationScript {
   case class Register(cxt: RegistrationContext) extends AppAction[Option[User]]
   def register(cxt: RegistrationContext): Script[Option[User]] = Register(cxt).lift
 }
-
-

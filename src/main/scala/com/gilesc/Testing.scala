@@ -1,9 +1,6 @@
-package com.gilesc.registration
+package com.gilesc
 
 import cats.{Id, ~>}
-import com.gilesc.{DateTime, ApplicationScript, Logging}
-
-
 
 trait Testing extends ApplicationScript with Logging with DateTime with Registration {
   def registerNewUser(username: String, email: String, password: String) = for {
@@ -34,9 +31,4 @@ trait Testing extends ApplicationScript with Logging with DateTime with Registra
   }
 }
 
-object TestMain extends App with Testing {
-    println("TESTING")
-    TestInterpreter.run(doSomething("TEST ME"))
-    val usr = TestInterpreter.run(registerNewUser("myusername", "my@email.com", "mypassword"))
-    println(usr)
-}
+
