@@ -1,7 +1,13 @@
 package com.gilesc
 
+import cats.{Id, ~>}
+
 object Main extends App with Testing {
-  TestInterpreter.run(doSomething("Testing"))
-  val usr = TestInterpreter.run(registerNewUser("myusername", "my@email.com", "mypassword"))
-  println(usr)
+  val composedInterpreter: FirstApp ~> Id = ConsoleLoggingInterpreter or ZonedDateTimeInterpreter
+  val interpreter: MyApp ~> Id = TestRegistrationInterpreter or composedInterpreter
+
+  val prg = timingProgram("my message")
+  val reg = registerNewUser("myusername", "myemail", "mypassword")
+  prg.foldMap(interpreter)
+  reg.foldMap(interpreter)
 }

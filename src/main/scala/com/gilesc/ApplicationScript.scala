@@ -1,11 +1,8 @@
 package com.gilesc
 
-import cats.free.Free
-import cats.free.Free._
+import cats.data.Coproduct
 
 trait ApplicationScript {
-  type Script[A] = Free[AppAction, A]
-  trait AppAction[A] {
-    def lift: Script[A] = liftF(this)
-  }
+  type FirstApp[A] = Coproduct[LoggingAction, DateTimeAction, A]
+  type MyApp[A] = Coproduct[RegistrationAction, FirstApp, A]
 }
