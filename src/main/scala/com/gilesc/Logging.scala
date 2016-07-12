@@ -6,12 +6,14 @@ import cats.{Id, ~>}
 trait LoggingAction[A]
 
 sealed trait LogLevel
-case object Debug extends LogLevel
-case object Info extends LogLevel
-case object Warn extends LogLevel
-case object Error extends LogLevel
+case object Debug extends LogLevel { override def toString = "[debug] - "}
+case object Info extends LogLevel { override def toString = "[info] - "}
+case object Warn extends LogLevel { override def toString = "[warn] - "}
+case object Error extends LogLevel { override def toString = "[error] - "}
 
-case class Logger(message: String, level: LogLevel) extends LoggingAction[Unit]
+case class Logger(message: String, level: LogLevel) extends LoggingAction[Unit] {
+  override def toString = level.toString + message
+}
 
 class LoggingActions[F[_]](implicit I: Inject[LoggingAction, F]) {
   def log(message: String, level: LogLevel) = Free.inject[LoggingAction,F](Logger(message, level))
@@ -30,7 +32,7 @@ object LoggingActions {
 
 object ConsoleLoggingInterpreter extends (LoggingAction ~> Id) {
   def apply[A](fa: LoggingAction[A]): Id[A] = fa match {
-    case Logger(p, _) => println(p)
+    case Logger(a,b) => println(b+a)
   }
 }
 
